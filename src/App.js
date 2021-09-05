@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import Photo from "./photo";
+import Video from "./photo";
 import "./styles.css";
 import "./App.css";
 
@@ -27,7 +28,7 @@ function useFetch(url) {
 
   useEffect(() => {
     callUrl();
-  });
+  }, []);
 
   return { payload, loading, error };
 }
@@ -56,7 +57,33 @@ export default function App() {
                 />
               );
             } else if (photo.media_type === "CAROUSEL_ALBUM") {
-              return <span key={photo.id}>{photo.id}</span>;
+              let { albumPayload, albumLoading, albumError } = useFetch(
+                `https://graph.instagram.com/${photo.id}/children?fields=media_url,media_type&access_token=${ACCESS_TOKEN}`
+              );
+              albumPayload.map((child) => {
+                return (
+                  <Photo
+                    key={photo.id}
+                    id={photo.id}
+                    caption={photo.caption}
+                    media_url={child.media_url}
+                    username={photo.username}
+                    timestamp={photo.timestamp}
+                  />
+                );
+              });
+              //return <span key={photo.id}>{photo.id}</span>;
+            } else if (photo.media_type === "VIDEO") {
+              return (
+                <Video
+                  key={photo.id}
+                  id={photo.id}
+                  caption={photo.caption}
+                  media_url={photo.media_url}
+                  username={photo.username}
+                  timestamp={photo.timestamp}
+                />
+              );
             }
             return null;
           })}
