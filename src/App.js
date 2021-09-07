@@ -33,14 +33,6 @@ function useFetch(url) {
   return { payload, loading, error };
 }
 
-const getChild = async (url) => {
-  const {
-    data: { data }
-  } = await Axios.get(url);
-
-  return data;
-};
-
 export default function App() {
   const { payload, loading, error } = useFetch(
     `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,thumbnail_url,username,timestamp&access_token=${ACCESS_TOKEN}`
@@ -64,26 +56,6 @@ export default function App() {
                   timestamp={photo.timestamp}
                 />
               );
-            } else if (photo.media_type === "CAROUSEL_ALBUM") {
-              const albumPayload = getChild(
-                `https://graph.instagram.com/${photo.id}/children?fields=media_url,media_type&access_token=${ACCESS_TOKEN}`
-              );
-
-              console.log(albumPayload);
-
-              // albumPayload.map((child) => {
-              //   return (
-              //     <Photo
-              //       key={photo.id}
-              //       id={photo.id}
-              //       caption={photo.caption}
-              //       media_url={child.media_url}
-              //       username={photo.username}
-              //       timestamp={photo.timestamp}
-              //     />
-              //   );
-              // });
-              //return <span key={photo.id}>{photo.id}</span>;
             } else if (photo.media_type === "VIDEO") {
               return (
                 <Video
