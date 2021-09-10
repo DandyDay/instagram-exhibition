@@ -56,17 +56,6 @@ export default function App() {
                   timestamp={photo.timestamp}
                 />
               );
-            } else if (photo.media_type === "VIDEO") {
-              return (
-                <Video
-                  key={photo.id}
-                  id={photo.id}
-                  caption={photo.caption}
-                  media_url={photo.media_url}
-                  username={photo.username}
-                  timestamp={photo.timestamp}
-                />
-              );
             }
             return null;
           })}
